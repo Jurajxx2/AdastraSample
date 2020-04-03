@@ -1,3 +1,5 @@
 package com.trasimus.adastrasample.screens.list
 
-class ListFragmentHandler {}
+interface ListFragmentHandler {
+    fun openBeerDetail(id: Int)
+}
