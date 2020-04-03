@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.trasimus.adastrasample.R
-import com.trasimus.adastrasample.models.Beer
 import kotlinx.android.synthetic.main.detail_fragment_adapter_item_image.view.*
 import kotlinx.android.synthetic.main.detail_fragment_adapter_item_info.view.*
 import kotlinx.android.synthetic.main.detail_fragment_adapter_item_title.view.*
@@ -57,7 +57,7 @@ class DetailFragmentAdapter(val handler: DetailFragmentAdapterHandler) : Recycle
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, adapterItem: BeerDetailAdapterItem, handler: DetailFragmentAdapterHandler) {
                 (holder as? BeerDetailViewHolder.ImageHolder)?.let {
                     (adapterItem as? BeerDetailAdapterItem.ItemImage)?.let {
-                        handler.inflateImage(adapterItem.url,holder.image)
+                        handler.inflateImage(adapterItem.url, holder.image, holder.loader)
                     }
                 }
             }
@@ -104,6 +104,7 @@ class DetailFragmentAdapter(val handler: DetailFragmentAdapterHandler) : Recycle
     private sealed class BeerDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         class ImageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val image: ImageView = itemView.detail_fragment_item_image
+            val loader: ProgressBar = itemView.detail_fragment_item_loading
         }
 
         class TitleHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

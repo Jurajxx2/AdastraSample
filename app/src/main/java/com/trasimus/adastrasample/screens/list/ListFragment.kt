@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.trasimus.adastrasample.MainActivity
 import com.trasimus.adastrasample.R
 import com.trasimus.adastrasample.communication.local.AppDatabase
 import com.trasimus.adastrasample.models.Beer
@@ -30,6 +31,9 @@ class ListFragment : Fragment(), ListFragmentAdapterHandler {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ListFragmentViewModel::class.java)
+
+        (activity as MainActivity?)?.getSupportActionBar()?.setDisplayHomeAsUpEnabled(false)
+        (activity as MainActivity?)?.getSupportActionBar()?.setDisplayShowHomeEnabled(false)
 
         viewManager = LinearLayoutManager(activity)
         viewAdapter = ListFragmentAdapter(this)

@@ -1,7 +1,7 @@
 package com.trasimus.adastrasample
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.trasimus.adastrasample.screens.detail.DetailFragmentHandler
@@ -16,6 +16,11 @@ class MainActivity : AppCompatActivity(), DetailFragmentHandler, ListFragmentHan
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navController = findNavController(R.id.nav_host_fragment)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        navController?.navigateUp()
+        return true
     }
 
     override fun openBeerDetail(id: Int) {

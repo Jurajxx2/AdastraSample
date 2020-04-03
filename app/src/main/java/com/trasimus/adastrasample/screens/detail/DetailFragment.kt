@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import com.trasimus.adastrasample.MainActivity
 import com.trasimus.adastrasample.R
 import com.trasimus.adastrasample.communication.local.AppDatabase
 import com.trasimus.adastrasample.models.Beer
@@ -28,7 +31,7 @@ class DetailFragment : Fragment(), DetailFragmentAdapterHandler {
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var viewAdapter: DetailFragmentAdapter
 
-    val args: DetailFragmentArgs by navArgs<DetailFragmentArgs>()
+    val args: DetailFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.detail_fragment, container, false)
@@ -37,6 +40,11 @@ class DetailFragment : Fragment(), DetailFragmentAdapterHandler {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailFragmentViewModel::class.java)
+
+        (activity as MainActivity?)?.getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
+        (activity as MainActivity?)?.getSupportActionBar()?.setDisplayShowHomeEnabled(true)
+
+        val beerId = args.id
 
         viewManager = LinearLayoutManager(activity)
         viewAdapter = DetailFragmentAdapter(this)
@@ -64,11 +72,23 @@ class DetailFragment : Fragment(), DetailFragmentAdapterHandler {
         }
 
         context?.let {
-            viewModel.beer(AppDatabase.getInstance(it), id).observe(viewLifecycleOwner, beerListObserver)
+            viewModel.beer(AppDatabase.getInstance(it), beerId).observe(viewLifecycleOwner, beerListObserver)
         }
     }
 
-    override fun inflateImage(url: String, imageView: ImageView) {
-        Picasso.get().load(Uri.parse(url)).into(imageView)
+    override fun inflateImage(url: String, imageView: ImageView, progressBar: ProgressBar) {
+        var myCallback = object : Callback {
+            override fun onSuccess() {
+                progressBar.visibility = View.GONE
+            }
+
+            override fun onError(e: Exception?) {
+                context?.let {
+                    imageView.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.load_error))
+                }
+            }
+
+        }
+        Picasso.get().load(Uri.parse(url)).into(imageView, myCallback)
     }
 }

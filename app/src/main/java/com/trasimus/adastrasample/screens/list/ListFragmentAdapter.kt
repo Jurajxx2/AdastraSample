@@ -1,10 +1,10 @@
 package com.trasimus.adastrasample.screens.list
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.trasimus.adastrasample.R
 import com.trasimus.adastrasample.models.Beer
@@ -35,9 +35,13 @@ class ListFragmentAdapter(val handler: ListFragmentAdapterHandler): RecyclerView
         val beer = adapterItems[position]
 
         holder.itemName.text = beer.name
+        holder.itemHolder.setOnClickListener {
+            handler.onBeerClick(beer.id)
+        }
     }
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         var itemName: TextView = view.list_fragment_item_name
+        var itemHolder: ConstraintLayout = view.list_fragment_item_holder
     }
 }
